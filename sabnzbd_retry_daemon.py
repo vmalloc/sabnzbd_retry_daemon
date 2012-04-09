@@ -12,6 +12,7 @@ parser.add_argument("-v", "--verbose", action="store_true", default=False)
 parser.add_argument("-a", "--apikey", dest="api_key", required=True)
 parser.add_argument("-H", "--host", default="127.0.0.1")
 parser.add_argument("-p", "--port", default=8080, type=int)
+parser.add_argument("-l", "--history-limit", default=20, type=int)
 
 def main(args):
     for retry_url in _get_retry_urls(args):
@@ -19,7 +20,7 @@ def main(args):
     return 0
 
 def _get_retry_urls(args):
-    url = "http://{}:{}/api?mode=history&limit=10&output=json&apikey={}".format(args.host, args.port, args.api_key)
+    url = "http://{}:{}/api?mode=history&limit={}&output=json&apikey={}".format(args.host, args.port, args.history_limit, args.api_key)
     logging.debug("Getting %s", url)
     data = json.loads(urlopen(url).read())
     for slot in data['history']['slots']:
